@@ -24,8 +24,14 @@ function App() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
 
+
+  const consoleLogger = (loadingValue: boolean) => {
+    setLoading(loadingValue)
+    console.info(loading)
+  }
+
   const fetchData = async () => {
-    setLoading(true)
+    consoleLogger(true)
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/tickets`)
 
@@ -38,7 +44,7 @@ function App() {
     } catch (err) {
       setError(err as string)
     } finally {
-      setLoading(false)
+      consoleLogger(false)
     }
 
   }
