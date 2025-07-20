@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react'
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import './App.css'
+import { useFetch } from './hooks'
 // import { Button } from './components'
 
 // para explicar la funcinalidad del useState
@@ -19,64 +20,32 @@ import './App.css'
 
 // export default App
 
+const url = `${import.meta.env.VITE_API_URL}/tickets`
+
 function App() {
-  const [data, setData] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState("")
-
-
-  const consoleLogger = (loadingValue: boolean) => {
-    setLoading(loadingValue)
-    console.info(loading)
-  }
-
-  const fetchData = async () => {
-    consoleLogger(true)
-    try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/tickets`)
-
-      if (!response.ok) {
-        throw new Error("Error al obtener los datos: ")
-      }
-
-      const json = await response.json()
-      setData(json.data)
-    } catch (err) {
-      setError(err as string)
-    } finally {
-      consoleLogger(false)
-    }
-
-  }
-
-  // comunicación con un endopoint de la API
-  useEffect(() => {
-    fetchData()
-  }, [])
+  const { data, loading, error } = useFetch(url)
 
   if (loading) {
     return <div>Loading...</div>
   }
 
   if (error) {
-    return <div>Error: {error}</div>
+    return <div>Error: {error.message}</div>
   }
 
   return (
     <div>
       <h1>Tickets</h1>
       <ul>
-        {data.map((ticket: any) => (
+        {data?.map((ticket: any) => (
           <li key={ticket.id}>
             {/* Suponiendo que cada ticket tiene un atributo 'title' o 'name' */}
-            {ticket.title || `Ticket ID: ${ticket.id}`}
+            {`Ticket : ${ticket.atributes.title || ticket.id}`}
           </li>
         ))}
       </ul>
     </div>
   )
-
-
 }
 
 export default App
