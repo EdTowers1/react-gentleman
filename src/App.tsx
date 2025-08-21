@@ -1,7 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import './App.css'
-import { useFetch } from './hooks'
-// import { Button } from './components'
+import { Button, ChildrenButton } from './components'
+import { useFetch, } from './hooks'
+import { sharedValueChildren } from './services'
+import { useEffect } from 'react'
+// import { Button } from './components'  
 
 // para explicar la funcinalidad del useState
 // function App() {
@@ -24,6 +27,15 @@ const url = `${import.meta.env.VITE_API_URL}/tickets`
 
 function App() {
   const { data, loading, error } = useFetch(url)
+  const service = sharedValueChildren;
+
+  const handleClick = () => {
+    console.log("Valor actualizado:");
+  }
+
+  useEffect(() => {
+    service.setValue("Edwin");
+  },);
 
   if (loading) {
     return <div>Loading...</div>
@@ -44,6 +56,9 @@ function App() {
           </li>
         ))}
       </ul>
+      <Button parentMethod={handleClick}>
+        <ChildrenButton><div>My label</div></ChildrenButton>
+      </Button>
     </div>
   )
 }
